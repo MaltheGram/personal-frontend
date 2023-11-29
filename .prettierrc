@@ -1,0 +1,26 @@
+{
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "trailingComma": "none",
+    "endOfLine": "auto",
+    "semi": false,
+    "singleQuote": false,
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": true,
+    "overrides": [
+      {
+        "files": "*.js",
+        "options": {
+          "parser": "babel"
+        }
+      },
+      {
+        "files": "*.html"
+      },
+      {
+        "files": "*.css"
+      }
+    ]
+  }
+  
