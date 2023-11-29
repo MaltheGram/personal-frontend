@@ -1,7 +1,15 @@
 <script>
 	import LevelDot from "$lib/components/LevelDot.svelte"
+	import { baseUrl } from "$lib/stores/stores.js"
 
 	export let data
+
+	let urlValue
+
+	const unsubscribe = baseUrl.subscribe(value => {
+		urlValue = value
+	})
+	unsubscribe()
 
 	const skills = data.skills
 
@@ -18,9 +26,7 @@
 	let project = {}
 
 	const getProjectDataBySkill = async skillId => {
-		const response = await fetch(
-			`http://localhost:8080/api/projects/skill/${skillId}`
-		)
+		const response = await fetch(`${urlValue}/api/projects/skill/${skillId}`)
 		console.log(response)
 		if (response.ok) {
 			const data = await response.json()
