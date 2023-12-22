@@ -26,11 +26,10 @@
 	let project = {}
 
 	const getProjectDataBySkill = async skillId => {
-		const response = await fetch(`${urlValue}/api/projects/skill/${skillId}`)
-		console.log(response)
+		const response = await fetch(`api/projects/skill/${skillId}`)
 		if (response.ok) {
 			const data = await response.json()
-			project = data.Data
+			project = data
 		} else {
 			console.error("Failed to fetch projects", response.status)
 		}
@@ -98,6 +97,10 @@
 		transition: transform 0.6s;
 		transform-style: preserve-3d;
 		box-sizing: border-box;
+		a {
+			color: blue;
+			text-decoration: underline;
+		}
 	}
 
 	.card-front,

@@ -18,11 +18,13 @@
 			>
 		{/if}
 		<div class="project-skills">
-			<h2>Technologies Used:</h2>
+			<h2>Technologies Used</h2>
 			<ul class="skills-list">
 				{#each project?.skills as skill}
 					<li class="skill-item">
-						<span class="skill-name"><a href="/tech">{skill?.name}</a></span>
+						<span class="skill-name">
+							<a href="/skills">{skill.name}</a>
+						</span>
 						<LevelDot {skill} />
 					</li>
 				{/each}
@@ -40,7 +42,7 @@
 		width: 100vw;
 		padding: 5vh 5vw;
 		box-sizing: border-box;
-		background-color: #f5f5f5; // Light background for the container
+		// background-color: #f5f5f5; // Light background for the container
 
 		.content {
 			max-width: 960px; // Maximum width of the content
