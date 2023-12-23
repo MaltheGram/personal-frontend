@@ -1,12 +1,19 @@
 <script>
-	// Your script logic goes here (if needed)
+	import { Button, Dropdown, DropdownItem } from "flowbite-svelte"
+	const btnColor = "light"
 </script>
 
 <nav class="header">
-	<a href="/">Home</a>
-	<a href="/skills">Tech stack</a>
-	<a href="/about">About me</a>
-	<a href="/projects">Projects</a>
+	<Button color={btnColor} pill href="/">Home</Button>
+	<Button color={btnColor} pill>Tech stack</Button>
+	<Dropdown>
+		<DropdownItem href="/skills#Frontend">Frontend</DropdownItem>
+		<DropdownItem href="/skills#Backend">Backend</DropdownItem>
+		<DropdownItem href="/skills#Cloud">Cloud</DropdownItem>
+		<DropdownItem href="/skills#Database">Database</DropdownItem>
+	</Dropdown>
+	<Button color={btnColor} pill href="/projects">Projects</Button>
+	<Button color={btnColor} pill href="/about">About me</Button>
 </nav>
 
 <style lang="scss">
@@ -15,17 +22,5 @@
 		color: white;
 		padding: 10px 20px;
 		text-align: right;
-
-		a {
-			color: white;
-			padding: 10px;
-			text-decoration: none;
-			font-size: 18px;
-			transition: color 0.3s;
-
-			&:hover {
-				color: #f0f0f0;
-			}
-		}
 	}
 </style>

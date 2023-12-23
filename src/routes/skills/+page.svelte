@@ -1,17 +1,12 @@
 <script>
 	import LevelDot from "$lib/components/LevelDot.svelte"
-	import { baseUrl } from "$lib/stores/stores.js"
+	import { Card } from "flowbite-svelte"
 
 	export let data
 
-	let urlValue
-
-	const unsubscribe = baseUrl.subscribe(value => {
-		urlValue = value
-	})
-	unsubscribe()
-
 	const skills = data.skills
+	let numberOfSkillTypes = new Set()
+	skills.forEach(skill => numberOfSkillTypes.add(skill.type))
 
 	const sortSkillsByType = skills => {
 		return skills.sort((a, b) => {
@@ -36,7 +31,56 @@
 	}
 </script>
 
-<div class="grid-container">
+<div class="grid grid-cols-1 gap-4">
+	{#each numberOfSkillTypes as type}
+		<div class="text-center">
+			<h1 id={type}>{type}</h1>
+			{#each skills as skill}
+				{#if skill.type === type}
+					<div class="skill-card">
+						<div class="card-inner">
+							<div
+								class="card-front"
+								on:mouseenter={() => getProjectDataBySkill(skill._id)}
+								role="button"
+								tabindex="0"
+							>
+								<img src={skill.logo} alt={skill.name} />
+								<h2>{skill.name}</h2>
+								<p>{skill.type}</p>
+								<LevelDot {skill} />
+							</div>
+							<div class="card-back">
+								{#if project[0]}
+									<span>This technology is used in the following projects:</span
+									>
+									<ul>
+										<li>
+											Github:
+											<a href={project[0]?.url} target="_blank"
+												>{project[0]?.name}</a
+											>
+										</li>
+										<li>
+											Website:
+											<a href="/projects/{project[0]?.name}"
+												>{project[0]?.name}</a
+											>
+										</li>
+									</ul>
+								{:else}
+									<span>Sorry, I have no avaliable projects to show off.</span>
+								{/if}
+							</div>
+						</div>
+					</div>
+				{/if}
+			{/each}
+		</div>
+	{/each}
+</div>
+
+<!-- <div class="grid-container">
 	{#each sortSkillsByType(skills) as skill}
 		<div class="skill-card">
 			<div class="card-inner">
@@ -71,22 +115,16 @@
 			</div>
 		</div>
 	{/each}
-</div>
+</div> -->
 
 <style lang="scss">
-	.grid-container {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 3.5em;
-		padding: 2.2rem;
-	}
-
 	.skill-card {
-		perspective: 1000px;
-		height: 300px; // Adjust as necessary
-		// Prevent any layout shift during the animation
-		margin: 0;
+		height: 10rem;
+		margin: 2.2em 0 0 0;
 		box-sizing: border-box;
+		&:last-child {
+			margin-bottom: 50px;
+		}
 	}
 
 	.card-inner {
@@ -105,10 +143,11 @@
 
 	.card-front,
 	.card-back {
+		margin: 5px 0 0 0;
 		position: absolute;
 		top: 0;
-		left: 0;
-		width: 100%;
+		left: 25%;
+		width: 50%;
 		height: 100%;
 		overflow: hidden;
 		backface-visibility: hidden;
@@ -143,7 +182,7 @@
 		max-height: 50%;
 		height: auto;
 		border-radius: 4px;
-		margin-bottom: 8px;
+		padding: 10px;
 	}
 
 	h2 {
