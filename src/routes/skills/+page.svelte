@@ -1,24 +1,18 @@
 <script>
 	import LevelDot from "$lib/components/LevelDot.svelte"
-	import { Card } from "flowbite-svelte"
+	import { Card, Button, Modal, Hr, Search, Toast } from "flowbite-svelte"
+	import { slide } from "svelte/transition"
+	import { InfoCircleSolid } from "flowbite-svelte-icons"
+	import SkillPicker from "./SkillPicker.svelte"
 
 	export let data
 
-	const skills = data.skills
+	let skills = data.skills
 	let numberOfSkillTypes = new Set()
 	skills.forEach(skill => numberOfSkillTypes.add(skill.type))
 
-	const sortSkillsByType = skills => {
-		return skills.sort((a, b) => {
-			const typeA = a.type.toLowerCase()
-			const typeB = b.type.toLowerCase()
-
-			if (typeA < typeB) return -1
-			if (typeA > typeB) return 1
-			return 0
-		})
-	}
 	let project = {}
+	let clickOutsideModal = false
 
 	const getProjectDataBySkill = async skillId => {
 		const response = await fetch(`api/projects/skill/${skillId}`)
@@ -28,94 +22,139 @@
 		} else {
 			console.error("Failed to fetch projects", response.status)
 		}
+		clickOutsideModal = true
+	}
+
+	let searchValue = ""
+	let displayToast = false
+	const scrollIntoSkillView = () => {
+		searchValue = searchValue.replace(" ", "").toLowerCase()
+		const el = document.querySelector(`#${searchValue}`)
+		if (!el) {
+			displayToast = true
+			setTimeout(() => {
+				displayToast = false
+				searchValue = ""
+			}, 5000)
+			return
+		}
+		el.scrollIntoView({
+			behavior: "smooth"
+		})
+		searchValue = ""
+	}
+	let skillPickerOpen = true
+
+	const reset = () => {
+		skills = data.skills
+	}
+	const filterByPicks = e => {
+		skills = skills.filter(skill => {
+			const skillName = skill.name.replace(/\s/g, "")
+			return e.detail.some(partialName => skillName.includes(partialName))
+		})
 	}
 </script>
 
-<div class="grid grid-cols-1 gap-4">
-	{#each numberOfSkillTypes as type}
-		<div class="text-center">
-			<h1 id={type}>{type}</h1>
-			{#each skills as skill}
-				{#if skill.type === type}
-					<div class="skill-card">
-						<div class="card-inner">
-							<div
-								class="card-front"
-								on:mouseenter={() => getProjectDataBySkill(skill._id)}
-								role="button"
-								tabindex="0"
-							>
-								<img src={skill.logo} alt={skill.name} />
-								<h2>{skill.name}</h2>
+<div class="p-6 rounded-lg shadow-lg">
+	<h2 class="text-2xl font-bold mb-4 text-gray-800">Tech Stack</h2>
+	<div>
+		<p class="mb-4">
+			Here you can find a list of technologies I have worked with. I have
+			indicated my level of experience with each technology.
+		</p>
+		{#if displayToast}
+			<div class="flex gap-10">
+				<Toast color="red" transition={slide} dismissable={false}>
+					<InfoCircleSolid slot="icon" class="w-4 h-4" />
+					Sadly, {searchValue} is not part of my tech stack.
+				</Toast>
+			</div>
+		{/if}
+
+		<form on:submit|preventDefault={scrollIntoSkillView}>
+			<Search
+				class="mb-4"
+				bind:value={searchValue}
+				placeholder="Looking for a particular skill?"
+			>
+				<Button type="submit" class="mr-3 shadow-s">Search</Button>
+			</Search>
+		</form>
+
+		<div class="mb-10">
+			<h2 class="text-2xl">Looking for a particular skill set?</h2>
+			<p>Let's see if match I you!</p>
+			<Button size="xl" on:click={() => (skillPickerOpen = !skillPickerOpen)}
+				>Skill Picker</Button
+			>
+			{#if skillPickerOpen}
+				<SkillPicker on:reset={reset} on:skillPicker={filterByPicks} />
+			{/if}
+		</div>
+	</div>
+
+	<div class="grid s:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+		{#each numberOfSkillTypes as type}
+			<div class="p-4 bg-white rounded-lg shadow-md content-center">
+				<h1 class="text-3xl mb-5" id={type}>{type}</h1>
+				{#each skills as skill, i (skill._id)}
+					{#if skill.type === type}
+						<Card
+							id={skill.name.replace(" ", "").toLowerCase()}
+							img={skill.logo}
+							padding="xl"
+							horizontal
+							class="skill-card mb-5  shadow-2xl shadow-orange-300"
+						>
+							<div>
+								<h2 class="capitalize">{skill.name}</h2>
 								<p>{skill.type}</p>
 								<LevelDot {skill} />
+								<Button
+									on:click={() => getProjectDataBySkill(skill._id)}
+									class="w-fit">Related projects</Button
+								>
 							</div>
-							<div class="card-back">
-								{#if project[0]}
-									<span>This technology is used in the following projects:</span
-									>
-									<ul>
-										<li>
-											Github:
-											<a href={project[0]?.url} target="_blank"
-												>{project[0]?.name}</a
-											>
-										</li>
-										<li>
-											Website:
-											<a href="/projects/{project[0]?.name}"
-												>{project[0]?.name}</a
-											>
-										</li>
-									</ul>
-								{:else}
-									<span>Sorry, I have no avaliable projects to show off.</span>
-								{/if}
-							</div>
-						</div>
-					</div>
-				{/if}
-			{/each}
-		</div>
-	{/each}
-</div>
 
-<!-- <div class="grid-container">
-	{#each sortSkillsByType(skills) as skill}
-		<div class="skill-card">
-			<div class="card-inner">
-				<div
-					class="card-front"
-					on:mouseenter={() => getProjectDataBySkill(skill._id)}
-					role="button"
-					tabindex="0"
-				>
-					<img src={skill.logo} alt={skill.name} />
-					<h2>{skill.name}</h2>
-					<p>{skill.type}</p>
-					<LevelDot {skill} />
-				</div>
-				<div class="card-back">
-					{#if project[0]}
-						<span>This technology is used in the following projects:</span>
-						<ul>
-							<li>
-								Github:
-								<a href={project[0]?.url} target="_blank">{project[0]?.name}</a>
-							</li>
-							<li>
-								Website:
-								<a href="/projects/{project[0]?.name}">{project[0]?.name}</a>
-							</li>
-						</ul>
-					{:else}
-						<span>Sorry, I have no avaliable projects to show off.</span>
+							<Modal
+								title={project.length > 0
+									? "Projects"
+									: "Sorry, I have no avaliable projects to show off."}
+								bind:open={clickOutsideModal}
+								autoclose
+								outsideclose
+							>
+								<svelte:fragment>
+									{#if project.length > 0}
+										<h2 class="text-lg font-bold">
+											This technology is used in the following projects:
+										</h2>
+										<ul>
+											{#each project as project}
+												<li>
+													Github:
+													<a href={project.url} target="_blank"
+														>{project.name}</a
+													>
+												</li>
+												<li>
+													Website:
+													<a href="/projects/{project.name}">{project.name}</a>
+												</li>
+												<Hr />
+											{/each}
+										</ul>
+									{/if}
+								</svelte:fragment>
+							</Modal>
+						</Card>
 					{/if}
-				</div>
+				{/each}
 			</div>
-		</div>
-	{/each}
-</div> -->
+		{/each}
+	</div>
+</div>
 
 <style lang="scss">
 	.skill-card {
@@ -125,71 +164,5 @@
 		&:last-child {
 			margin-bottom: 50px;
 		}
-	}
-
-	.card-inner {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		text-align: center;
-		transition: transform 0.6s;
-		transform-style: preserve-3d;
-		box-sizing: border-box;
-		a {
-			color: blue;
-			text-decoration: underline;
-		}
-	}
-
-	.card-front,
-	.card-back {
-		margin: 5px 0 0 0;
-		position: absolute;
-		top: 0;
-		left: 25%;
-		width: 50%;
-		height: 100%;
-		overflow: hidden;
-		backface-visibility: hidden;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		border-radius: 8px;
-		padding: 10px;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		box-sizing: border-box;
-		border: 1px solid transparent;
-	}
-
-	.card-front {
-		background-color: #f9f9f9;
-		border: 1px solid #ccc;
-	}
-
-	.card-back {
-		background-color: #ddf;
-		border: 1px solid #ccc;
-		transform: rotateY(180deg);
-	}
-
-	.skill-card:hover .card-inner {
-		transform: rotateY(180deg);
-	}
-
-	img {
-		max-width: 100%;
-		max-height: 50%;
-		height: auto;
-		border-radius: 4px;
-		padding: 10px;
-	}
-
-	h2 {
-		margin: 0.5em 0;
-	}
-
-	p {
-		margin-bottom: 12px;
 	}
 </style>

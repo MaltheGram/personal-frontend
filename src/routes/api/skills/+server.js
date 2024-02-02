@@ -1,6 +1,7 @@
 import { Skill, validateSkill } from "$db/models/skills"
 import { json } from "@sveltejs/kit"
 import { API_KEY, AWS_PREFIX } from "$env/static/private"
+import AWS from "aws-sdk"
 
 export const GET = async () => {
 	const data = await Skill.find()
@@ -22,15 +23,23 @@ export const POST = async ({ request }) => {
 		return json(
 			{
 				error: error.details[0].message,
-				Notices: `Please ensure values are spelled correclty. Be aware of white space.`
+				Notices: `Please ensure values are spelled correctly. Be aware of white space.`
 			},
 			{
 				status: 400
 			}
 		)
 
+	Object.keys(body).forEach(key => {
+		if (typeof body[key] === "string") {
+			body[key] = body[key].toLowerCase()
+		}
+	})
+
 	const skill = await new Skill(body)
-	skill.logo = `${AWS_PREFIX}/skill_images/${skill.name}`
+	if (skill.logo) {
+		skill.logo = `${AWS_PREFIX}/skill_images/${skill.name}`
+	}
 
 	const data = await skill.save()
 	return json(`Created new skill in database: ${data}`)

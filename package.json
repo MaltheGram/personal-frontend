@@ -22,17 +22,20 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"aws-sdk": "^2.1525.0",
+		"bcrypt": "^5.1.1",
 		"dotenv": "^16.3.1",
 		"flowbite": "^2.2.1",
 		"flowbite-svelte": "^0.44.21",
+		"flowbite-svelte-icons": "^0.4.5",
 		"joi": "^17.11.0",
 		"joi-objectid": "^4.0.2",
 		"joi-oid": "^1.1.2",
 		"mongodb": "^6.3.0",
 		"mongoose": "^8.0.3",
+		"nodemailer": "^6.9.7",
 		"prettier": "^3.1.0",
 		"sass": "^1.69.5",
-		"svelte-device-info": "^1.0.0",
 		"svelte-preprocess": "^5.1.0"
 	}
 }

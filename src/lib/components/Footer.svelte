@@ -10,15 +10,12 @@
 	} from "flowbite-svelte"
 </script>
 
-<!-- <Footer
-	footerType="socialmedia"
-	class="sticky"
->
+<Footer footerType="socialmedia">
 	<FooterCopyright href="/" by="Malthe Gram" year={2023} />
 	<FooterLinkGroup
-		ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
+		ulClass="flex flex-wrap items-center content-space mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0"
 	>
-		<FooterLink href="https://www.facebook.com/malthegram/"
+		<FooterLink target href="https://www.facebook.com/malthegram/"
 			><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"
 				><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
 					id="SVGRepo_tracerCarrier"
@@ -35,7 +32,7 @@
 				></svg
 			></FooterLink
 		>
-		<FooterLink href="https://www.instagram.com/malthegram/?hl=da"
+		<FooterLink target href="https://www.instagram.com/malthegram/?hl=da"
 			><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
 				><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
 					id="SVGRepo_tracerCarrier"
@@ -124,7 +121,7 @@
 				</g></svg
 			>
 		</FooterLink>
-		<FooterLink href="https://www.linkedin.com/in/malthe-gram/"
+		<FooterLink target href="https://www.linkedin.com/in/malthe-gram/"
 			><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"
 				><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
 					id="SVGRepo_tracerCarrier"
@@ -138,7 +135,7 @@
 				></svg
 			>
 		</FooterLink>
-		<FooterLink href="/https://github.com/MaltheGram">
+		<FooterLink target href="https://github.com/MaltheGram">
 			<svg
 				viewBox="0 -3 256 256"
 				version="1.1"
@@ -162,7 +159,7 @@
 			>
 		</FooterLink>
 	</FooterLinkGroup>
-</Footer> -->
+</Footer>
 
 <style lang="scss">
 	svg {
