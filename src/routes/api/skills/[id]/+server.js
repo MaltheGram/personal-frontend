@@ -3,7 +3,10 @@ import { json } from "@sveltejs/kit"
 import { API_KEY } from "$env/static/private"
 
 export const GET = async ({ params }) => {
-	const data = await Skill.find({ _id: params.id })
+	let data
+	Number(params.id)
+		? data = await Skill.find({ _id: params.id })
+		: data = await Skill.find({ name: params.id })
 	return json(data, {})
 }
 

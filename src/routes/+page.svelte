@@ -8,7 +8,7 @@
 	let isAlternateText = false
 
 	const catchyTextOnOff = () => {
-		let text = isAlternateText ? "I am Malthe!" : "Hello world!"
+		let text = isAlternateText ? "I am Malthe!" : "Hello World!"
 		let index = 0
 		const interval = setInterval(() => {
 			if (index < text.length) {

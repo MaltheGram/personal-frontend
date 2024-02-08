@@ -1,5 +1,7 @@
 import { API_KEY } from "$env/static/private"
+import { fail } from "@sveltejs/kit"
 
+/** @type {import('./$types').Actions} */
 export const actions = {
 	mailer: async ({ request, fetch }) => {
 		const data = await request.formData()
@@ -7,6 +9,15 @@ export const actions = {
 		const name = data.get("name")
 		const email = data.get("email")
 		const subject = data.get("subject")
+
+		if (!content || !name || !email) {
+			console
+			return fail(400, {
+				email, missing: true ||
+					name, missing: true ||
+						content, missing: true
+			})
+		}
 
 		const jsonData = { name, content, email, subject }
 
@@ -19,4 +30,5 @@ export const actions = {
 			body: JSON.stringify(jsonData)
 		})
 	}
+
 }
