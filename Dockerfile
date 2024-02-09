@@ -1,6 +1,8 @@
 FROM node:19.7-alpine AS sk-build
 WORKDIR /usr/src/app
 
+COPY .env /usr/src/app/.env
+
 ARG TZ=Europe/Stockholm
 
 COPY . /usr/src/app
