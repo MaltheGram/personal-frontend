@@ -17,7 +17,6 @@ export const load = async ({ request, cookies, url }) => {
 	if (dbSession?.expires && new Date(dbSession.expires).getTime() < Date.now()) {
 		cookies.delete("session", { path: "/" })
 		const sessionToDelete = await Session.findOneAndDelete({ sessionId: localSession })
-		//throw redirect(302, "/login")
 	}
 
 	if (dbSession) {
