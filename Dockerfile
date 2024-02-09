@@ -1,27 +1,32 @@
-FROM node:19.7-alpine AS sk-build
+# Use a multi-stage build to first build the application
+FROM node:19.7-alpine AS build-stage
 WORKDIR /usr/src/app
 
-COPY .env /usr/src/app/.env
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-ARG TZ=Europe/Stockholm
-
-COPY . /usr/src/app
-RUN apk --no-cache add curl tzdata
-RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# Install dependencies
 RUN npm install
+
+# Copy the rest of your application code
+COPY . .
+
+# Build your application
 RUN npm run build
 
+# Start a new stage from node:19.7-alpine to keep the image small
 FROM node:19.7-alpine
 WORKDIR /usr/src/app
 
-ARG TZ=Europe/Stockholm
-RUN apk --no-cache add curl tzdata
-RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# Only copy the built assets and necessary files from the previous stage
+COPY --from=build-stage /usr/src/app/build ./build
+COPY package*.json ./
 
-COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
-COPY --from=sk-build /usr/src/app/package-lock.json /usr/src/app/package-lock.json
+# Install production dependencies
+RUN npm install --only=production
 
-COPY --from=sk-build /usr/src/app/build /usr/src/app/build
-
+# Expose the port your app runs on
 EXPOSE 3000
+
+# Command to run your app
 CMD ["node", "build/index.js"]
