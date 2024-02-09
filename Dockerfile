@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 ARG TZ=Europe/Stockholm
 
 COPY . /usr/src/app
+ENV NODE_ENV=production
 RUN apk --no-cache add curl tzdata
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN npm install
