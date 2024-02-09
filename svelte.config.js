@@ -9,7 +9,7 @@ const config = {
 	preprocess: [preprocess({ scss: true }), vitePreprocess({})],
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({ out: "build" }),
 		alias: {
 			$db: "./src/database"
 		}
