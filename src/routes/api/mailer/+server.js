@@ -12,7 +12,7 @@ export const POST = async ({ request }) => {
 		)
 	const body = await request.json()
 
-	const { name, email, content, subject } = body
+	const { name, email, content, subject, headline } = body
 
 	const transporter = nodemailer.createTransport({
 		//service: "gmail",
@@ -27,7 +27,7 @@ export const POST = async ({ request }) => {
 	const mailOptions = {
 		from: NODEMAILER_EMAIL,
 		to: GOOGLE_MAIL,
-		subject: subject,
+		subject: headline,
 		html:
 			`
 			<h2>New message from your site!</h2>
@@ -36,20 +36,20 @@ export const POST = async ({ request }) => {
 			<br>
 			<b>Email:</b> ${email}
 			<br>
+			<b>Subject:</b> ${subject || "No subject provided"}
+			<br>
 			<b>Content:</b> ${content}
 		</p>`
 	}
-
-	transporter.sendMail(mailOptions, (error, info) => {
+	const mailResponse = transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			console.error(error)
 			console.error("Email not sent: " + error)
-			fail(400, { error })
+			fail(500, { error })
 		} else {
-			console.log("Email sent: " + info)
 			console.log("Email sent: " + info.response)
 			return json({ message: "success" })
 		}
 	})
-	return new Response("OK")
+	return new Response({ mailResponse })
 }

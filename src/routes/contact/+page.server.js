@@ -9,17 +9,19 @@ export const actions = {
 		const name = data.get("name")
 		const email = data.get("email")
 		const subject = data.get("subject")
+		const headline = data.get("headline")
 
-		if (!content || !name || !email) {
-			console
-			return fail(400, {
-				email, missing: true ||
-					name, missing: true ||
-						content, missing: true
-			})
+		if (!email) {
+			return fail(400, { email, missing: true })
+		}
+		if (!content) {
+			return fail(400, { content, missing: true })
+		}
+		if (!name) {
+			return fail(400, { name, missing: true })
 		}
 
-		const jsonData = { name, content, email, subject }
+		const jsonData = { name, content, email, headline, subject }
 
 		const response = await fetch("/api/mailer", {
 			method: "POST",
@@ -29,6 +31,10 @@ export const actions = {
 			},
 			body: JSON.stringify(jsonData)
 		})
+		if (response.status === 200) {
+			return { success: true }
+		} else {
+			return { errro: true }
+		}
 	}
-
 }
