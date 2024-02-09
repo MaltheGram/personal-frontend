@@ -15,6 +15,9 @@
 		{#if form?.incorrect || form?.missing}
 			<p class="text-lg text-red-700">Invalid credenetails</p>
 		{/if}
+		{#if form?.sessionExpired}
+			<p class="text-lg text-red-700">Session has expired</p>
+		{/if}
 
 		<Button type="submit">Login</Button>
 	</form>

@@ -1,15 +1,24 @@
 import { User } from "$db/models/user"
 import { Session } from "$db/models/session"
 import bcrypt from "bcrypt"
-import { fail, json, redirect } from "@sveltejs/kit"
+import { fail, error, json, redirect } from "@sveltejs/kit"
 import crypto from "crypto"
 import { ObjectId } from "mongodb"
 
 
-// TODO: Check for session date
 export const load = async ({ request, cookies, url }) => {
 	const localSession = cookies.get("session")
 	const dbSession = await Session.findOne({ sessionId: localSession })
+
+	if (localSession !== dbSession?.sessionId) {
+		console.warn("Session mismatch. Someone might be trying to hack the system.")
+		throw redirect(302, "/")
+	}
+	if (dbSession?.expires && new Date(dbSession.expires).getTime() < Date.now()) {
+		cookies.delete("session", { path: "/" })
+		const sessionToDelete = await Session.findOneAndDelete({ sessionId: localSession })
+		//throw redirect(302, "/login")
+	}
 
 	if (dbSession) {
 		throw redirect(302, "/admin")
