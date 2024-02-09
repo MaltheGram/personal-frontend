@@ -10,7 +10,7 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN npm install
 RUN npm run build
 
-FROM node:19.7-alpine
+FROM node:20.11.0-alpine.3.18
 WORKDIR /usr/src/app
 
 ARG TZ=Europe/Stockholm
