@@ -29,4 +29,4 @@ RUN npm install --only=production
 EXPOSE 3000
 
 # Command to run your app
-CMD ["node", "build/index.js"]
+CMD ["node", "-r dotenv/config build"]
