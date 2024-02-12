@@ -28,5 +28,5 @@ RUN npm install --only=production
 # Expose the port your app runs on
 EXPOSE 3000
 
-# Command to run your app
-CMD ["node", "-r dotenv/config build"]
+# Start your application with environment variables loaded
+CMD ["node", "-r", "dotenv/config", "build"]
