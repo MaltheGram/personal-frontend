@@ -1,7 +1,9 @@
 import { Skill, validateSkill } from "$db/models/skills"
 import { json } from "@sveltejs/kit"
-import { API_KEY, AWS_PREFIX } from "$env/static/private"
-import AWS from "aws-sdk"
+import { env } from "$env/dynamic/private"
+const API_KEY = env.API_KEY
+const AWS_PREFIX = env.AWS_PREFIX
+
 
 export const GET = async () => {
 	const data = await Skill.find()

@@ -4,9 +4,10 @@ import {
 	getProjectsWithSkills
 } from "$db/models/projects"
 import { json } from "@sveltejs/kit"
-import { API_KEY } from "$env/static/private"
+import { env } from "$env/dynamic/private"
+const API_KEY = env.API_KEY
 
-export const GET = async ({}) => {
+export const GET = async ({ }) => {
 	const data = await getProjectsWithSkills()
 	return json(data, {})
 }

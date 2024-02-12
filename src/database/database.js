@@ -1,5 +1,6 @@
-import { DB_STRING } from "$env/static/private"
+import { env } from "$env/dynamic/private"
 import mongoose from "mongoose"
+const DB_STRING = env.DB_STRING
 
 /* 
   0 - disconnected

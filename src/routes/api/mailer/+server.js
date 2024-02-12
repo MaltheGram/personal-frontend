@@ -1,5 +1,11 @@
 import { fail, json, redirect } from "@sveltejs/kit"
-import { API_KEY, NODEMAILER_EMAIL, APP_PASSWORD, SMTP_HOST, GOOGLE_MAIL } from "$env/static/private"
+import { env } from "$env/dynamic/private"
+const API_KEY = env.API_KEY
+const NODEMAILER_EMAIL = env.NODEMAILER_EMAIL
+const APP_PASSWORD = env.APP_PASSWORD
+const SMTP_HOST = env.SMTP_HOST
+const GOOGLE_MAIL = env.GOOGLE_MAIL
+
 import nodemailer from "nodemailer"
 
 export const POST = async ({ request }) => {
@@ -11,6 +17,7 @@ export const POST = async ({ request }) => {
 			}
 		)
 	const body = await request.json()
+	console.log(body)
 
 	const { name, email, content, subject, headline } = body
 

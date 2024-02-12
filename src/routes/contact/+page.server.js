@@ -1,5 +1,6 @@
-import { API_KEY } from "$env/static/private"
+import { env } from "$env/dynamic/private"
 import { fail } from "@sveltejs/kit"
+const API_KEY = env.API_KEY
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -31,9 +32,12 @@ export const actions = {
 			},
 			body: JSON.stringify(jsonData)
 		})
+		console.log(response.status)
+
 		if (response.status === 200) {
 			return { success: true }
 		} else {
+			console.error("Error sending email", response.status)
 			return { errro: true }
 		}
 	}

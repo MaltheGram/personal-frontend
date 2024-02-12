@@ -1,6 +1,8 @@
 import { Skill } from "$db/models/skills"
 import { json } from "@sveltejs/kit"
-import { API_KEY } from "$env/static/private"
+import { env } from "$env/dynamic/private"
+const API_KEY = env.API_KEY
+
 
 export const GET = async ({ params }) => {
 	let data

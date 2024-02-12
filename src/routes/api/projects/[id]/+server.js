@@ -1,4 +1,5 @@
-import { API_KEY } from "$env/static/private"
+import { env } from "$env/dynamic/private"
+const API_KEY = env.API_KEY
 import { Project, getSingleProjectWithSkills } from "$db/models/projects"
 import { json } from "@sveltejs/kit"
 

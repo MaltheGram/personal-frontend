@@ -85,7 +85,9 @@
 				<Button type="submit">Reach out!</Button>
 			</div>
 		</form>
-		<div class="flex items-center text-xs">
+		<div
+			class="flex items-center justify-between p-4 mb-6 bg-white shadow-lg rounded-lg text-xs"
+		>
 			<span>Or mail me directly!</span>
 			<a
 				href="mailto:malthegram22@gmail.com"
