@@ -1,6 +1,6 @@
 <script>
 	import { Button, Modal, Hr, Search, Toast } from "flowbite-svelte"
-	import Card from "$lib/components/Card.svelte"
+	import Card from "./SkillCard.svelte"
 
 	export let data
 

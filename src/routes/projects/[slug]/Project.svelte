@@ -4,7 +4,7 @@
 	import LevelDot from "$lib/components/LevelDot.svelte"
 </script>
 
-<div class="project-container">
+<!-- <div class="project-container">
 	<div class="content">
 		<h1 class="project-title">{project?.name}</h1>
 		<p class="project-description">{project?.description}</p>
@@ -31,7 +31,8 @@
 			</ul>
 		</div>
 	</div>
-</div>
+</div> -->
+<h1>TODO: Figure if I want this</h1>
 
 <style lang="scss">
 	.project-container {
