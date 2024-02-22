@@ -24,10 +24,16 @@ export const POST = async ({ request }) => {
 	const body = await request.json()
 	const { error } = await validateProject(body)
 
+	Object.entries(body).forEach(([key, value]) => {
+		if (value === "") {
+			delete body[key]
+		}
+	})
+
 	if (error)
 		return json(
 			{
-				error: error.details[0].message
+				error: error.details
 			},
 			{
 				status: 400

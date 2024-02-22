@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="project-card">
+<div class="project-details">
 	<h1>{project.name}</h1>
 	<Accordion {project} />
 	<Listgroup class="mt-5" shadow color="dropdown">
@@ -22,9 +22,11 @@
 			Skills used
 		</h2>
 		{#each project.skills as skill}
-			<ListgroupItem class="flex t items-center">
+			<ListgroupItem
+				class="flex lg:flex-row md:flex-col items-center overflow-auto"
+			>
 				<Avatar class="mr-2" src={skill.logo} alt={skill.name} />
-				<span class="mr-5 ml-5">{skill.name}</span>
+				<span class="mr-2 ml-2 lg:mr-3">{skill.name}</span>
 				<LevelDot {skill} />
 			</ListgroupItem>
 		{/each}
@@ -40,11 +42,7 @@
 </div>
 
 <style lang="scss">
-	.blur {
-		filter: blur(15px);
-		pointer-events: none;
-	}
-	.project-card {
+	.project-details {
 		h1 {
 			text-align: center;
 			font-weight: 700;

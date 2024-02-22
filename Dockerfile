@@ -1,34 +1,31 @@
-# Use a specific version of node image from the Alpine family for a smaller image size
-FROM node:20.11.0-alpine3.18 as builder
-
-# Create app directory in the container
-WORKDIR /app
-
-# Install app dependencies by copying package.json and package-lock.json first
-COPY package*.json ./
-
-RUN npm install
-
-# Bundle app source
-COPY . .
-
-# Build your app
-RUN npm run build
-
-FROM node:20.11.0-alpine3.18
+# Build stage
+FROM node:16-alpine AS build
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the build directory and package.json files from the builder stage
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/package*.json ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Install only production dependencies
-RUN npm install --only=production
+# Install dependencies
+RUN npm install
 
-# Clean npm cache
-RUN npm cache clean --force
+# Copy the rest of your application's code
+COPY . .
 
-# Command to run your app
-CMD ["node", "build/index.js"]
+# Build your SvelteKit application
+RUN npm run build
+
+# Production stage
+FROM node:16-alpine AS production
+
+WORKDIR /app
+
+# Copy built app from the build stage
+COPY --from=build /app/build .
+
+# Your app will run on port 3000. Adjust if your app uses a different port.
+EXPOSE 3000
+
+# Start your app
+CMD ["node", "index.js"]

@@ -26,7 +26,7 @@ export const validateProject = project => {
 	const schema = Joi.object({
 		name: Joi.string().required(),
 		description: Joi.string().optional(),
-		url: Joi.string().optional(),
+		url: Joi.string().optional().allow(""),
 		skillsUsed: Joi.array().items(Joi.objectId().required())
 	})
 	return schema.validate(project)

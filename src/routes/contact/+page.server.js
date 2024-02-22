@@ -28,17 +28,16 @@ export const actions = {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: API_KEY
+				"Authorization": API_KEY
 			},
 			body: JSON.stringify(jsonData)
 		})
-		console.log(response.status)
 
 		if (response.status === 200) {
 			return { success: true }
 		} else {
 			console.error("Error sending email", response.status)
-			return { errro: true }
+			return { error: true }
 		}
 	}
 }
