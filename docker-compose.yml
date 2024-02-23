@@ -1,36 +1,41 @@
-version: '3.8'
+version: '3'
 
 services:
-  app:
+  web:
     build: .
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - DB_STRING
-      - API_KEY
-      - AWS_S3_PREFIX
-      - AWS_PREFIX
-      - AWS_BUCKET_NAME
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - GOOGLE_EMAIL
-      - SMTP_HOST
-      - APP_PASSWORD
-      - NODEMAILER_EMAIL
-
-
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run start
+        - NODE_ENV=production
+        - DB_STRING
+        - API_KEY
+        - AWS_S3_PREFIX
+        - AWS_PREFIX
+        - AWS_BUCKET_NAME
+        - AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY
+        - GOOGLE_EMAIL
+        - SMTP_HOST
+        - APP_PASSWORD
+        - NODEMAILER_EMAIL
+    restart: always
 
   nginx:
-    image: nginx:alpine
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - web
     ports:
       - "80:80"
+      - "443:443"
+    restart: always
+
+  certbot:
+    image: certbot/certbot
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./public:/usr/share/nginx/html:ro
-    depends_on:
-      - app
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

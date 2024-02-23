@@ -1,31 +1,23 @@
-# Build stage
-FROM node:16-alpine AS build
+# Use an official Node runtime as a parent image
+FROM node:16
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
+# Install any dependencies
 RUN npm install
 
-# Copy the rest of your application's code
+# Bundle app source
 COPY . .
 
-# Build your SvelteKit application
+# Build your app
 RUN npm run build
 
-# Production stage
-FROM node:16-alpine AS production
-
-WORKDIR /app
-
-# Copy built app from the build stage
-COPY --from=build /app/build .
-
-# Your app will run on port 3000. Adjust if your app uses a different port.
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start your app
-CMD ["node", "index.js"]
+# Define the command to run your app
+CMD [ "node", "build" ]
