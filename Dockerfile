@@ -17,9 +17,14 @@ ARG TZ=Europe/Stockholm
 RUN apk --no-cache add curl tzdata
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Copy package.json and package-lock.json
 COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
 COPY --from=sk-build /usr/src/app/package-lock.json /usr/src/app/package-lock.json
 
+# Copy the node_modules directory
+COPY --from=sk-build /usr/src/app/node_modules /usr/src/app/node_modules
+
+# Copy the build directory
 COPY --from=sk-build /usr/src/app/build /usr/src/app/build
 
 EXPOSE 3000
