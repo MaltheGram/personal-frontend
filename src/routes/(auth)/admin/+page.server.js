@@ -2,9 +2,10 @@ import { fail, redirect, json } from "@sveltejs/kit"
 import { Session } from "$db/models/session"
 import { User } from "$db/models/user"
 import { Skill } from "$db/models/skills"
-import { Project, validateProject } from "$db/models/projects"
+import { Project } from "$db/models/projects"
 import { env } from "$env/dynamic/private"
 const API_KEY = env.API_KEY
+
 
 export const load = async ({ cookies }) => {
 	const localSession = cookies.get("session")
@@ -46,11 +47,20 @@ export const load = async ({ cookies }) => {
 			name: skill.name,
 
 		}
-	}
-	)
+	})
+	const projects = await Project.find()
+
+	const serializedProjects = projects.map(project => {
+		return {
+			id: project.id.toString(),
+			name: project.name,
+		}
+	})
+
 	return {
 		user: serializedUser,
-		skills: serializedSkills
+		skills: serializedSkills,
+		projects: serializedProjects,
 	}
 
 }
@@ -59,7 +69,7 @@ export const load = async ({ cookies }) => {
 export const actions = {
 	skill: async ({ request }) => {
 		const data = await request.formData()
-		console.log(data)
+
 		return { success: true }
 	},
 	project: async ({ request, fetch }) => {
@@ -88,11 +98,23 @@ export const actions = {
 				return { error: true }
 			}
 		}
-	},
-	user: async ({ request }) => {
-		const data = await request.formData()
-		console.log(data)
-		return { success: true }
+		if (data.get("delete")) {
+			const id = data.get("id")
+			const project = await Project.findById(id)
+			const response = await fetch(`/api/projects/${id}`, {
+				method: "DELETE",
+				headers: {
+					"Authorization": API_KEY,
+				}
+			})
+			if (response.status === 200) {
+				return { success: true, projectName: project.name }
+			}
+			else {
+				console.error({ message: "Error deleting project", status: response.status, error: response })
+				return { error: true }
+			}
+		}
 	}
 }
 

@@ -13,16 +13,6 @@
 <div class="mt-10">
 	<form on:submit={clearSelected} action="?/{type}" use:enhance method="POST">
 		<Input type="hidden" name="create" value={true} />
-		{#if type === "user"}
-			<Label for="username">Username</Label>
-			<Input type="text" name="username" />
-
-			<Label for="password">Password</Label>
-			<Input type="password" name="password" />
-
-			<Label for="role">Will this user be admin?</Label>
-			<Checkbox type="checkbox" name="role" />
-		{/if}
 
 		{#if type === "skill"}
 			<Label for="skill">Name</Label>
@@ -73,7 +63,7 @@
 				</div>
 			</div>
 		{/if}
-		<div class="mt-5">
+		<div class="mt-5 mb-5">
 			<Button type="submit" color="primary">Create new {type}</Button>
 		</div>
 	</form>

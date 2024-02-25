@@ -2,38 +2,42 @@
 	export let data
 	import { ButtonGroup, Button, Hr } from "flowbite-svelte"
 	import Create from "$lib/components/admin/Create.svelte"
+	import Delete from "$lib/components/admin/Delete.svelte"
 
-	let creationType = ""
+	/** @type {import('./$types').ActionData} */
+	export let form
+
+	let actionType = "" // Possible values: "", "create", "delete", "edit"
+	let itemType = "" // Possible values: "", "user", "skill", "project"
+	let displayAction = false
+
+	const handleAction = (action, type) => {
+		actionType = action
+		itemType = type
+		displayAction = true
+	}
 </script>
 
 <div class="container">
 	<h1>Welcome to the Admin page {data?.user?.username}</h1>
 	<Hr />
 	<div class="handlers">
-		<div class="user-handler">
-			<h3>Users</h3>
-			<ButtonGroup>
-				<Button
-					on:click={() => {
-						creationType = "user"
-					}}
-					shadow="true">Create user</Button
-				>
-				<Button shadow="true">Edit user</Button>
-				<Button shadow="true">Delete user</Button>
-			</ButtonGroup>
-		</div>
 		<div class="skill-handler">
 			<h3>Skills</h3>
 			<ButtonGroup>
 				<Button
 					on:click={() => {
-						creationType = "skill"
+						handleAction("create", "skill")
 					}}
 					shadow="true">Create skill</Button
 				>
 				<Button shadow="true">Edit skill</Button>
-				<Button shadow="true">Delete skill</Button>
+				<Button
+					on:click={() => {
+						handleAction("delete", "skill")
+					}}
+					shadow="true">Delete skill</Button
+				>
 			</ButtonGroup>
 		</div>
 		<div class="project-handler">
@@ -41,17 +45,39 @@
 			<ButtonGroup>
 				<Button
 					on:click={() => {
-						creationType = "project"
+						handleAction("create", "project")
 					}}
 					shadow="true">Create project</Button
 				>
-				<Button shadow="true">Edit project</Button>
-				<Button shadow="true">Delete project</Button>
+				<Button
+					on:click={() => {
+						handleAction("edit", "project")
+					}}
+					shadow="true">Edit project</Button
+				>
+				<Button
+					on:click={() => {
+						handleAction("delete", "project")
+					}}
+					shadow="true">Delete project</Button
+				>
 			</ButtonGroup>
 		</div>
 	</div>
 	<div id="action-container">
-		<Create skills={data.skills} type={creationType} />
+		{#if displayAction}
+			{#if actionType === "create"}
+				<Create skills={data.skills} type={itemType} />
+			{:else if actionType === "delete"}
+				<Delete
+					{form}
+					users={data.users}
+					skills={data.skills}
+					projects={data.projects}
+					type={itemType}
+				/>
+			{/if}
+		{/if}
 	</div>
 </div>
 
@@ -82,7 +108,6 @@
 				flex-direction: column;
 			}
 
-			.user-handler,
 			.skill-handler,
 			.project-handler {
 				display: flex;

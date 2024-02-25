@@ -25,7 +25,7 @@ const ProjectSchema = new mongoose.Schema(
 export const validateProject = project => {
 	const schema = Joi.object({
 		name: Joi.string().required(),
-		description: Joi.string().optional(),
+		description: Joi.string().optional().allow(""),
 		url: Joi.string().optional().allow(""),
 		skillsUsed: Joi.array().items(Joi.objectId().required())
 	})
