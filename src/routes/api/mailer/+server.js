@@ -17,7 +17,6 @@ export const POST = async ({ request }) => {
 			}
 		)
 	const body = await request.json()
-	console.log(body)
 
 	const { name, email, content, subject, headline } = body
 

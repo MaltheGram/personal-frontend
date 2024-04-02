@@ -9,7 +9,7 @@
 <div class="card bg-white" id={skill.name}>
 	<h1 class="title">{skill.name}</h1>
 	<p>{skill.type}</p>
-	<img src={skill.logo} alt={skill.id} />
+	<img src={skill.logo} alt={skill.name} />
 
 	<Button
 		class="mt-4"
@@ -43,8 +43,11 @@
 		}
 
 		.title {
-			text-transform: capitalize;
 			font-size: 1.5rem;
+		}
+
+		* {
+			text-transform: capitalize;
 		}
 	}
 </style>

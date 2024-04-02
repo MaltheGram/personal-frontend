@@ -1,7 +1,12 @@
 <script>
-	import { Timeline, TimelineItem } from "flowbite-svelte"
+	import { Timeline, TimelineItem, Modal, Button } from "flowbite-svelte"
 	import { onMount } from "svelte"
 	import NextSection from "$lib/components/NextSection.svelte"
+
+	export let data
+	let modal = false
+	const experiences = data.experiences
+
 	const profilePicture =
 		"https://www.svgrepo.com/show/512721/profile-minus-1350.svg"
 
@@ -9,7 +14,7 @@
 	let isAlternateText = false
 
 	const catchyTextOnOff = () => {
-		let text = isAlternateText ? "I am Malthe!" : "Hello World!"
+		let text = isAlternateText ? "My name is Malthe" : "Hello World!"
 		let index = 0
 		const interval = setInterval(() => {
 			if (index < text.length) {
@@ -33,7 +38,7 @@
 
 <div class="main">
 	<img src={profilePicture} alt="profile_picture" />
-	<p>{catchyText}</p>
+	<p class="gradient">{catchyText}</p>
 </div>
 
 <div>
@@ -41,74 +46,72 @@
 		<div class="mt-10">
 			<NextSection nextSectionId={"section2"} title="My journey in Tech" />
 			<Timeline order="vertical">
-				<TimelineItem
-					title="Computer Science AP  @ KEA - Copenhagen School of Design and Technology"
-					date="Februray 2021 - June 2023"
-					><span>
-						I began my journey at <a target="_blank" href="https://www.kea.dk/"
-							>KEA - Copenhagen School of Design and Technology.</a
-						>
-					</span>
-				</TimelineItem>
-				<TimelineItem
-					title="Web Development @ Bonnier Publications"
-					date="Februray 2022 - January 2023"
-					><span>
-						I began as a part time web deveoper at <a
-							target="_blank"
-							href="https://www.bonnierpublications.com/"
-							>Bonnier Publications</a
-						>
-					</span>
-				</TimelineItem>
-				<TimelineItem
-					title="Internship @ Nets A/S"
-					date="January 2023 - April 2023"
-				>
-					<span>
-						I started my internship at <a
-							target="_blank"
-							href="https://www.nets.eu/dk-da">Nets</a
-						> where I worked on a test automation system alongside my colleague.
-					</span>
-				</TimelineItem>
-				<TimelineItem>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo
-					odit voluptates odio, aut numquam dolorem aliquam officiis enim
-					quisquam earum rerum inventore quo repudiandae quas doloribus tenetur
-					soluta possimus similique. Animi eligendi laborum perspiciatis sed
-					quod neque rerum delectus saepe ratione, itaque cupiditate soluta,
-					doloribus deleniti voluptas natus! Suscipit repudiandae quos vitae a
-					alias eveniet, quod dolore optio unde error.
-				</TimelineItem>
-				<TimelineItem
-					>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum vero
-					veniam eos libero porro dolorem quidem dignissimos molestiae nostrum
-					voluptate nemo sed, provident aspernatur adipisci magnam aliquid,
-					itaque accusamus ipsa!</TimelineItem
-				>
-				<TimelineItem
-					>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus,
-					modi distinctio? Laborum nesciunt perferendis, atque architecto
-					aliquam placeat aut provident consectetur omnis. Debitis adipisci
-					veritatis, voluptas nam praesentium dolores aspernatur?</TimelineItem
-				>
-				<TimelineItem
-					>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti
-					temporibus error consequatur omnis ad velit quo corporis rerum, at
-					nostrum, eos quidem minima sunt rem sint tempora iusto inventore
-					aliquid.</TimelineItem
-				>
-				<TimelineItem
-					>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti
-					temporibus error consequatur omnis ad velit quo corporis rerum, at
-					nostrum, eos quidem minima sunt rem sint tempora iusto inventore
-					aliquid.</TimelineItem
-				>
+				{#each experiences as experience}
+					<TimelineItem
+						title={experience.company || experience.school
+							? experience.title +
+								" @ " +
+								(experience.company || experience.school)
+							: experience.title}
+						date={`${experience.startDate} - ${experience.endDate}`}
+					>
+						<div>
+							{experience.description}
+						</div>
+						{#if experience.associatedSkills.length > 0}
+							<div class="flex flex-col sm:flex-row items-center gap-x-2 mt-2">
+								<svg
+									class="w-8 h-12 sm:w-8 sm:h-12"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M5 19V6.2C5 5.08 5 4.52 5.218 4.092C5.41 3.716 5.716 3.41 6.092 3.218C6.52 3 7.08 3 8.2 3H15.8C16.92 3 17.48 3 17.908 3.218C18.284 3.41 18.59 3.716 18.782 4.092C19 4.52 19 5.08 19 6.2V17H7C5.895 17 5 17.895 5 19ZM5 19C5 20.105 5.895 21 7 21H19M18 17V21M14.5 8V7.917C14.5 6.858 13.642 6 12.583 6H11.5C10.395 6 9.5 6.895 9.5 8C9.5 9.105 10.395 10 11.5 10H12.5C13.605 10 14.5 10.895 14.5 12C14.5 13.105 13.605 14 12.5 14H11.458C10.377 14 9.5 13.123 9.5 12.042V12"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.5"
+									/>
+								</svg>
+								{#each experience.associatedSkills.slice(0, 3) as skill}
+									<a class="capitalize" href="/skills#{skill.name}"
+										>{skill.name}</a
+									>
+								{/each}
+								{#if experience.associatedSkills.length > 3}
+									<Button
+										class="bg-inherit p-2 ml-1 text-black hover:bg-gray-200 hover:scale-110 transition-all duration-300 ease-in-out"
+										pill="true"
+										on:click={() => (modal = true)}
+										>More...
+									</Button>
+									<Modal
+										title="Skills Associated with {experience.title} @ {experience.company ||
+											experience.school} "
+										bind:open={modal}
+										autoclose
+										outsideclose
+									>
+										{#each experience.associatedSkills as skill}
+											<a
+												class="capitalize mr-2
+												"
+												href="/skills#{skill.name}">{skill.name}</a
+											>
+										{/each}
+										<svelte:fragment slot="footer">
+											<Button on:click={() => (modal = !modal)}>Close</Button>
+										</svelte:fragment>
+									</Modal>
+								{/if}
+							</div>
+						{/if}
+					</TimelineItem>
+				{/each}
 			</Timeline>
 		</div>
 	</section>
-	<section class="bg-gray-400 section">
+	<!-- 	<section class="bg-gray-400 section">
 		<div class="mt-10">
 			<NextSection title="section2" />
 			<Timeline order="vertical">
@@ -120,7 +123,7 @@
 				>
 			</Timeline>
 		</div>
-	</section>
+	</section> -->
 </div>
 
 <style lang="scss">
@@ -130,6 +133,18 @@
 		align-items: center;
 		height: 100vh;
 		width: 100vw;
+
+		.gradient {
+			background: linear-gradient(
+				90deg,
+				rgb(18, 255, 22),
+				rgb(50, 142, 116),
+				rgb(72, 0, 255)
+			);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
 
 		img {
 			width: 100px;

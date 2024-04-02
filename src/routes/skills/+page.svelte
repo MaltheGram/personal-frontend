@@ -1,6 +1,6 @@
 <script>
 	import { Button, Modal, Hr, Search, Toast } from "flowbite-svelte"
-	import Card from "./SkillCard.svelte"
+	import SkillCard from "./SkillCard.svelte"
 
 	export let data
 
@@ -28,15 +28,15 @@
 >
 	{#each numberOfSkillTypes as type}
 		<div class="p-4 rounded-lg shadow-md align-center text-center">
-			<h1 class="text-3xl mb-5" id={type}>{type}</h1>
+			<h1 class="text-3xl mb-5 capitalize" id={type}>{type}</h1>
 			{#each skills as skill, i (skill._id)}
 				{#if skill.type === type}
-					<Card
+					<SkillCard
 						{skill}
 						on:openModal={() => {
 							getProjectDataBySkill(skill._id)
 						}}
-					></Card>
+					></SkillCard>
 					<Modal
 						title={project.length > 0
 							? "Projects"
@@ -57,7 +57,7 @@
 										</li>
 										<li class="list-item">
 											Portfolio:
-											<a href="/projects/{project.name}">{project.name}</a>
+											<a href="/projects#{project.name}">{project.name}</a>
 										</li>
 										<Hr />
 									{/each}

@@ -3,6 +3,7 @@
 	import { Label, Input, Button } from "flowbite-svelte"
 	export let projects = []
 	export let skills = []
+	export let experiences = []
 	export let type
 	export let form
 </script>
@@ -22,21 +23,38 @@
 				</div>
 			{/each}
 			{#if form?.success}
-				<p class="delete-success">Succesfully deleted {form?.projectName}</p>
+				<p class="delete-success">Succesfully deleted {form?.name}</p>
 			{/if}
 		{/if}
 
 		{#if type === "skill"}
 			{#each skills as skill}
 				<div class="project-row">
-					<Label for="project">{skill.name}</Label>
+					<Label class="capitalize" for="project">{skill.name}</Label>
 					<Button class="ml-5" type="submit" name="id" value={skill.id}
 						>Delete</Button
 					>
 				</div>
 			{/each}
 			{#if form?.success}
-				<p class="delete-success">Succesfully deleted {form?.projectName}</p>
+				<p class="delete-success">Succesfully deleted {form?.name}</p>
+			{/if}
+		{/if}
+
+		{#if type === "experience"}
+			{#each experiences as experience}
+				<div class="project-row">
+					<Label for="project"
+						>{experience.title} @ {experience?.school ||
+							experience?.company}</Label
+					>
+					<Button class="ml-5" type="submit" name="id" value={experience.id}
+						>Delete</Button
+					>
+				</div>
+			{/each}
+			{#if form?.success}
+				<p class="delete-success">Succesfully deleted {form?.title}</p>
 			{/if}
 		{/if}
 	</form>
