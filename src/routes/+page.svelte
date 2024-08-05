@@ -56,7 +56,9 @@
 						date={`${experience.startDate} - ${experience.endDate}`}
 					>
 						<div>
-							{experience.description}
+							<p>
+								{experience.description}
+							</p>
 						</div>
 						{#if experience.associatedSkills.length > 0}
 							<div class="flex flex-col sm:flex-row items-center gap-x-2 mt-2">
@@ -111,19 +113,6 @@
 			</Timeline>
 		</div>
 	</section>
-	<!-- 	<section class="bg-gray-400 section">
-		<div class="mt-10">
-			<NextSection title="section2" />
-			<Timeline order="vertical">
-				<TimelineItem
-					>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
-					adipisci sequi temporibus iste! Placeat possimus quo rerum sequi non
-					cum ullam dolore neque dolorum! Doloribus illum eveniet sapiente
-					architecto voluptas.</TimelineItem
-				>
-			</Timeline>
-		</div>
-	</section> -->
 </div>
 
 <style lang="scss">
@@ -173,6 +162,10 @@
 				&:active {
 					color: #4a4a4a;
 				}
+			}
+
+			p {
+				width: 250%;
 			}
 		}
 
