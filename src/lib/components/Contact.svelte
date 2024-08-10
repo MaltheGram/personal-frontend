@@ -90,6 +90,7 @@
 		>
 			<span>Or mail me directly!</span>
 			<a
+				target="_top"
 				href="mailto:malthegram22@gmail.com"
 				class="inline-flex items-center ml-2"
 			>

@@ -14,11 +14,16 @@
 <div class="project-container">
 	{#each projects as project (project._id)}
 		<div
+			id={project.name}
 			class:blur={focusedProjectId !== null && project._id !== focusedProjectId}
 			class:enlarge={focusedProjectId === project._id}
 			class="project-card"
 		>
-			<ProjectCard {project} on:focusProject={focusProject} />
+			<ProjectCard
+				{project}
+				focusString={focusedProjectId !== project._id ? "Focus" : "Defocus"}
+				on:focusProject={focusProject}
+			/>
 		</div>
 	{/each}
 </div>

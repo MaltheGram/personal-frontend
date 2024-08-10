@@ -18,6 +18,34 @@ export const GET = async ({ params }) => {
 	}
 }
 
+export const PUT = async ({ request, params }) => {
+	if (request.headers.get("Authorization") !== API_KEY)
+		return json(
+			{ error: "You are not authorized to perform this action" },
+			{
+				status: 403
+			}
+		)
+
+	const id = params.id
+	const data = await request.json()
+	const project = await Project.findByIdAndUpdate(id, data, {
+		new: true,
+		useFindAndModify: false
+	})
+
+	if (!project) {
+		return json(
+			{ error: `Project with id ${id} does not exist` },
+			{
+				status: 404
+			}
+		)
+	} else {
+		return json(project, {})
+	}
+}
+
 export const DELETE = async ({ request, params }) => {
 	if (request.headers.get("Authorization") !== API_KEY)
 		return json(
@@ -38,6 +66,6 @@ export const DELETE = async ({ request, params }) => {
 			}
 		)
 	} else {
-		return json(`Deleted pronject from database: ${JSON.stringify(id)}`, {})
+		return json(`Deleted project from database: ${JSON.stringify(id)}`, {})
 	}
 }

@@ -10,6 +10,7 @@
 	const dispatchFocusProject = () => {
 		dispatch("focusProject", project._id)
 	}
+	export let focusString
 </script>
 
 <div class="project-details">
@@ -27,7 +28,6 @@
 			>
 				<Avatar class="mr-2" src={skill.logo} alt={skill.name} />
 				<span class="mr-2 ml-2 lg:mr-3">{skill.name}</span>
-				<LevelDot {skill} />
 			</ListgroupItem>
 		{/each}
 	</Listgroup>
@@ -37,7 +37,9 @@
 		{/if}
 	</div>
 	<div class="text-center mt-5">
-		<Button on:click={dispatchFocusProject} role="button">Focus project</Button>
+		<Button on:click={dispatchFocusProject} role="button"
+			>{focusString} project</Button
+		>
 	</div>
 </div>
 

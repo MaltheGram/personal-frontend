@@ -39,7 +39,7 @@ export const POST = async ({ request }) => {
 				status: 400
 			}
 		)
-	const project = await new Project(body)
+	const project = new Project(body)
 	const data = await project.save()
 	return json(`Created new project in database: ${data}`)
 }

@@ -3,12 +3,13 @@
 	import { ButtonGroup, Button, Hr } from "flowbite-svelte"
 	import Create from "$lib/components/admin/Create.svelte"
 	import Delete from "$lib/components/admin/Delete.svelte"
+	import Edit from "$lib/components/admin/Edit.svelte"
 
 	/** @type {import('./$types').ActionData} */
 	export let form
 
 	let actionType = "" // Possible values: "", "create", "delete", "edit"
-	let itemType = "" // Possible values: "", "user", "skill", "project"
+	let itemType = "" // Possible values: "", "skill", "project", "experience"
 	let displayAction = false
 
 	const handleAction = (action, type) => {
@@ -31,7 +32,12 @@
 					}}
 					shadow="true">Create skill</Button
 				>
-				<Button shadow="true">Edit skill</Button>
+				<Button
+					on:click={() => {
+						handleAction("edit", "skill")
+					}}
+					shadow="true">Edit skill</Button
+				>
 				<Button
 					on:click={() => {
 						handleAction("delete", "skill")
@@ -63,6 +69,29 @@
 				>
 			</ButtonGroup>
 		</div>
+		<div class="experience-handler">
+			<h3>Experience</h3>
+			<ButtonGroup>
+				<Button
+					on:click={() => {
+						handleAction("create", "experience")
+					}}
+					shadow="true">Create experience</Button
+				>
+				<Button
+					on:click={() => {
+						handleAction("edit", "experience")
+					}}
+					shadow="true">Edit experience</Button
+				>
+				<Button
+					on:click={() => {
+						handleAction("delete", "experience")
+					}}
+					shadow="true">Delete experience</Button
+				>
+			</ButtonGroup>
+		</div>
 	</div>
 	<div id="action-container">
 		{#if displayAction}
@@ -71,9 +100,17 @@
 			{:else if actionType === "delete"}
 				<Delete
 					{form}
-					users={data.users}
 					skills={data.skills}
 					projects={data.projects}
+					experiences={data.experiences}
+					type={itemType}
+				/>
+			{:else if actionType === "edit"}
+				<Edit
+					{form}
+					skills={data.skills}
+					projects={data.projects}
+					experiences={data.experiences}
 					type={itemType}
 				/>
 			{/if}
@@ -109,7 +146,8 @@
 			}
 
 			.skill-handler,
-			.project-handler {
+			.project-handler,
+			.experience-handler {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
