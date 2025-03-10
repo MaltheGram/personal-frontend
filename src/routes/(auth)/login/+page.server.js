@@ -12,7 +12,7 @@ export const load = async ({ request, cookies, url }) => {
 
 	if (localSession !== dbSession?.sessionId) {
 		console.warn("Session mismatch. Someone might be trying to hack the system.")
-		throw redirect(302, "/")
+		redirect(302, "/");
 	}
 	if (dbSession?.expires && new Date(dbSession.expires).getTime() < Date.now()) {
 		cookies.delete("session", { path: "/" })
@@ -20,7 +20,7 @@ export const load = async ({ request, cookies, url }) => {
 	}
 
 	if (dbSession) {
-		throw redirect(302, "/admin")
+		redirect(302, "/admin");
 	}
 }
 
@@ -62,6 +62,6 @@ export const actions = {
 			path: "/"
 		})
 
-		throw redirect(302, "/admin")
+		redirect(302, "/admin");
 	}
 }

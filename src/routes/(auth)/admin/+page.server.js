@@ -14,21 +14,21 @@ export const load = async ({ cookies }) => {
 
 	if (localSession !== dbSession?.sessionId) {
 		console.warn("Session mismatch. Someone might be trying to hack the system.")
-		throw redirect(302, "/")
+		redirect(302, "/");
 	}
 	if (dbSession?.expires && new Date(dbSession.expires).getTime() < Date.now()) {
 		cookies.delete("session", { path: "/" })
 		const sessionToDelete = await Session.findOneAndDelete({ sessionId: localSession })
-		throw redirect(302, "/")
+		redirect(302, "/");
 	}
 
-	if (!dbSession) throw redirect(302, "/login")
+	if (!dbSession) redirect(302, "/login");
 
 	const userInSession = dbSession?.sessionUser
 	const user = await User.findById(userInSession)
 
 	if (!user) {
-		throw redirect(302, "/login")
+		redirect(302, "/login");
 	}
 
 	const serializedUser = {
